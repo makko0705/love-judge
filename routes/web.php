@@ -11,6 +11,6 @@ Route::get('/', [ChatController::class, 'index'])->name('index');
 Route::get('/progress', [ChatController::class, 'progress'])->name('progress');
 Route::get('/result', [ChatController::class, 'result'])->name('result');
 Route::get('/history', [ChatController::class, 'history'])->name('history');
+Route::get('/detail/{id}', [ChatController::class, 'detail'])->name('detail');
 Route::post('/analyze', [ChatController::class, 'analyze'])->name('analyze');
-Route::get('/admin/history', [ChatController::class, 'adminHistory'])->name('admin.history');
-Route::post('/save-consultation', [ChatController::class, 'saveConsultation']);
+Route::delete('/delete-consultation/{id}', [ChatController::class, 'deleteConsultation'])->name('delete-consultation');

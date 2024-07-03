@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use App\Models\Consultation;
+use App\Models\Diagnosis;
 
 class ChatController extends Controller
 {
@@ -38,13 +40,25 @@ class ChatController extends Controller
 
     public function history()
     {
-        return view('history');
+        $consultations = Consultation::with('diagnoses')->get();
+        return view('history', compact('consultations'));
+    }
+
+    public function detail($id)
+    {
+        $consultation = Consultation::with('diagnoses')->findOrFail($id);
+        return view('detail', compact('consultation'));
     }
 
     public function analyze(Request $request)
     {
         $chatHistory = $request->input('chatHistory');
-        $apiKeyIndex = 0;
+        $userName = $request->input('userName');
+        $partnerName = $this->findPartnerName($chatHistory, $userName);
+
+        Log::info('Received userName: ' . $userName);
+        Log::info('Determined partnerName: ' . $partnerName);
+
         $prompt = "以下のチャット履歴を分析し、診断結果を提供してください。診断内容を以下のJSON形式で返してください:\n" .
         "{\n" .
         "  \"恋愛可能性\": \"◯%\",\n" .
@@ -58,33 +72,62 @@ class ChatController extends Controller
         ];
 
         try {
-            $response = $this->fetchWithRetry($data, $apiKeyIndex);
-            Log::info('API Response: ', $response);
-            return response()->json($response);
+            $response = $this->fetchWithRetry($data);
+            $responseBody = $response->body();
+            Log::info('API Response Body: ' . $responseBody);
+
+            $result = json_decode($responseBody, true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \Exception('Failed to parse JSON response: ' . json_last_error_msg());
+            }
+
+            $diagnosisContent = $result['choices'][0]['message']['content'];
+            $diagnosisObject = json_decode($diagnosisContent, true);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new \Exception('Failed to parse diagnosis content: ' . json_last_error_msg());
+            }
+
+            $consultation = new Consultation();
+            $consultation->user_name = $userName;
+            $consultation->partner_name = $partnerName;
+            $consultation->save();
+
+            $diagnosis = new Diagnosis();
+            $diagnosis->consultation_id = $consultation->id;
+            $diagnosis->diagnosis_content = json_encode($diagnosisObject, JSON_UNESCAPED_UNICODE);
+            $diagnosis->love_possibility = intval($diagnosisObject['恋愛可能性']);
+            $diagnosis->go_or_wait = $diagnosisObject['GOorWAIT'];
+            $diagnosis->save();
+
+            return response()->json($result);
         } catch (\Exception $e) {
             Log::error('API Request failed: ' . $e->getMessage());
-            $responseBody = isset($response) ? $response->body() : 'No response body';
-            Log::error('Response body: ' . $responseBody);
-            return response()->json(['error' => 'API Request failed', 'message' => $e->getMessage(), 'response' => $responseBody], 500);
+            if (isset($responseBody)) {
+                Log::error('Response Body: ' . $responseBody);
+            }
+            return response()->json(['error' => 'API Request failed', 'message' => $e->getMessage()], 500);
         }
     }
 
-    private function fetchWithRetry($data, &$apiKeyIndex, $retries = 5, $delayTime = 30000)
+    public function deleteConsultation($id)
+    {
+        $consultation = Consultation::with('diagnoses')->findOrFail($id);
+        $consultation->diagnoses()->delete();
+        $consultation->delete();
+        return response()->json(['success' => true]);
+    }
+
+    private function fetchWithRetry($data, $retries = 5, $delayTime = 30000)
     {
         for ($i = 0; $i < $retries; $i++) {
-            $apiKey = $this->apiKeys[$apiKeyIndex++ % count($this->apiKeys)];
+            $apiKey = $this->apiKeys[$i % count($this->apiKeys)];
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'Authorization' => "Bearer {$apiKey}",
             ])->post($this->apiEndpoint, $data);
 
             if ($response->status() !== 429) {
-                if ($response->ok()) {
-                    Log::info('Successful response: ' . $response->body());
-                } else {
-                    Log::warning('Non-429 unsuccessful response: ' . $response->body());
-                }
-                return $response->json();
+                return $response;
             }
 
             $retryAfter = $response->header('Retry-After');
@@ -93,5 +136,13 @@ class ChatController extends Controller
         }
 
         throw new \Exception('Too many requests after multiple retries');
+    }
+
+    private function findPartnerName($chatHistory, $userName)
+    {
+        $lines = explode("\n", $chatHistory);
+        $partnerLine = $lines[0];
+        $partnerNameMatch = preg_match("/\[LINE\] (.+)とのトーク履歴/", $partnerLine, $matches);
+        return $partnerNameMatch ? $matches[1] : null;
     }
 }

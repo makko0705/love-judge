@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>過去のデータ</title>
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
   <nav>
@@ -19,34 +20,49 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
         const historyList = document.getElementById('historyList');
-        const history = JSON.parse(localStorage.getItem('history')) || [];
+        const consultations = @json($consultations);
 
-        history.forEach((entry, index) => {
+        consultations.forEach((consultation) => {
             const entryDiv = document.createElement('div');
             entryDiv.classList.add('history-entry');
 
-            const diagnosis = JSON.parse(entry.diagnosis);
-            const partnerName = diagnosis.partnerName;
+            const diagnosis = consultation.diagnoses.length > 0 ? consultation.diagnoses[0] : null;
+            const diagnosisContent = diagnosis ? JSON.parse(diagnosis.diagnosis_content) : {};
 
             const nameDiv = document.createElement('div');
-            nameDiv.textContent = `${partnerName} さんの診断結果`;
+            nameDiv.innerHTML = `<a href="/detail/${consultation.id}">${consultation.partner_name}</a>`;
             entryDiv.appendChild(nameDiv);
+
+            const percentageDiv = document.createElement('div');
+            percentageDiv.textContent = diagnosisContent['恋愛可能性'] + '%';
+            entryDiv.appendChild(percentageDiv);
+
+            const goOrWaitDiv = document.createElement('div');
+            goOrWaitDiv.textContent = diagnosisContent['GOorWAIT'];
+            entryDiv.appendChild(goOrWaitDiv);
 
             const deleteButton = document.createElement('button');
             deleteButton.textContent = '削除';
-            deleteButton.addEventListener('click', () => {
-                history.splice(index, 1);
-                localStorage.setItem('history', JSON.stringify(history));
-                location.reload();
+            deleteButton.addEventListener('click', async () => {
+                try {
+                    const response = await fetch(`/delete-consultation/${consultation.id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        }
+                    });
+
+                    if (response.ok) {
+                        entryDiv.remove();
+                    } else {
+                        console.error('Failed to delete consultation');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
             });
             entryDiv.appendChild(deleteButton);
-
-            const detailsButton = document.createElement('button');
-            detailsButton.textContent = '詳細';
-            detailsButton.addEventListener('click', () => {
-                alert(JSON.stringify(entry.diagnosis, null, 2));
-            });
-            entryDiv.appendChild(detailsButton);
 
             historyList.appendChild(entryDiv);
         });

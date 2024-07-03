@@ -5,10 +5,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         const progressBar = document.getElementById('progressBar');
         const progressElement = document.getElementById('progress');
 
-        // 相手の名前を判別する関数
         const findPartnerName = (chatHistory, userName) => {
             const lines = chatHistory.split('\n');
-            // 1行目に相手の名前が記載されていることを仮定します
             const partnerLine = lines[0];
             const partnerNameMatch = partnerLine.match(/\[LINE\] (.+)とのトーク履歴/);
             if (partnerNameMatch) {
@@ -52,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                 },
-                body: JSON.stringify({ chatHistory: chatHistory })
+                body: JSON.stringify({ chatHistory: chatHistory, userName: userName })
             });
 
             if (!response.ok) {
@@ -78,7 +76,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (error) {
             console.error('Error:', error);
 
-            // ここでエラーメッセージを適切に表示します
             if (error instanceof Error) {
                 progressElement.textContent = `Error: ${error.message}`;
             } else {
