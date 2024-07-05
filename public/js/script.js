@@ -1,22 +1,20 @@
 document.addEventListener('DOMContentLoaded', async () => {
     if (window.location.pathname.endsWith('/progress')) {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]');
+        if (!csrfToken) {
+            console.error('CSRF token not found in the document.');
+            return;
+        }
+
         const chatHistory = sessionStorage.getItem('chatHistory');
         const userName = sessionStorage.getItem('userName');
         const progressBar = document.getElementById('progressBar');
         const progressElement = document.getElementById('progress');
 
-        const findPartnerName = (chatHistory, userName) => {
-            const lines = chatHistory.split('\n');
-            const partnerLine = lines[0];
-            const partnerNameMatch = partnerLine.match(/\[LINE\] (.+)とのトーク履歴/);
-            if (partnerNameMatch) {
-                return partnerNameMatch[1];
-            }
-            return null;
-        };
-
-        const partnerName = findPartnerName(chatHistory, userName);
-        sessionStorage.setItem('partnerName', partnerName);
+        if (!chatHistory || !userName || !progressBar || !progressElement) {
+            console.error('Required elements or session data not found.');
+            return;
+        }
 
         const fetchWithRetry = async (url, options, retries = 5, delayTime = 30000) => {
             for (let i = 0; i < retries; i++) {
@@ -48,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    'X-CSRF-TOKEN': csrfToken.getAttribute('content')
                 },
                 body: JSON.stringify({ chatHistory: chatHistory, userName: userName })
             });
@@ -76,6 +74,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (error) {
             console.error('Error:', error);
 
+            // ここでエラーメッセージを適切に表示します
             if (error instanceof Error) {
                 progressElement.textContent = `Error: ${error.message}`;
             } else {

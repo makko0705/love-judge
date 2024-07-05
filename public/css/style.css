@@ -1,19 +1,101 @@
 @charset "UTF-8";
+html {
+  height: 100%;
+}
+
 body {
   font-family: Arial, sans-serif;
-  background: #D7F3FD;
+  height: 100%;
+  padding: 0;
+  margin: 0;
 }
-
 .container {
   max-width: 600px;
-  margin: 50px auto;
+  margin: 0 auto;
   text-align: center;
 }
+@media screen and (min-width: 414px) {
+  .container {
+    padding: 130px 20px;
+  }
+}
 
-textarea, button, input {
+textarea,
+input {
   width: 100%;
-  padding: 10px;
-  margin: 10px 0;
+  padding: 10px 0 10px 10px;
+  margin: 0 0 20px;
+}
+
+/* menuボタンの設定 */
+#menu-btn {
+  background: #81A4C7;
+  color: #fff;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  padding: 0;
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+#nav {
+  background: rgba(129, 164, 199, 0.83);
+  width: 100%;
+  height: 100%;
+  position: relative;
+  padding: 160px 0;
+}
+#nav li {
+  margin-bottom: 20px;
+}
+#nav a {
+  color: #fff;
+  display: inline-block;
+  padding: 0 0 10px;
+  border-bottom: 2px solid #fff;
+}
+
+.close {
+  width: 50px;
+  /* 線の長さ */
+  position: absolute;
+  top: 40px;
+  right: 15px;
+}
+
+.close::before,
+.close::after {
+  content: "";
+  /* 疑似要素に必須 */
+  width: 100%;
+  /* 幅いっぱいを指定 */
+  height: 4px;
+  /* 適度な太さを指定 */
+  display: inline-block;
+  /* 高さを持たせるためにinline-blockを指定 */
+  background: #fff;
+  /* 線の色を指定 */
+  border-radius: 2px;
+  /* 線の端を丸くしたいなら指定する */
+  position: absolute;
+  /* 相対位置に指定 */
+  top: 0;
+  /* 表示位置を上から0pxに指定 */
+  left: 0;
+  /* 表示位置を左から0pxに指定 */
+}
+
+.close::before {
+  transform: rotate(45deg);
+  /* 時計回りに45度回転させる */
+}
+
+.close::after {
+  transform: rotate(-45deg);
+  /* 反時計回りに45度回転させる */
 }
 
 nav {
@@ -37,7 +119,7 @@ nav a {
 .progress-bar {
   width: 0;
   height: 20px;
-  background-color: #4caf50;
+  background-color: #81A4C7;
   border-radius: 25px;
   text-align: center;
   line-height: 20px;
@@ -46,6 +128,11 @@ nav a {
 
 #imageArea {
   margin-bottom: 20px;
+  text-align: center;
+}
+#imageArea img {
+  width: 229px;
+  margin: 0 auto;
 }
 
 #compatibilityArea {
@@ -55,9 +142,44 @@ nav a {
 
 .history-entry {
   margin: 10px 0;
-  padding: 10px;
+  padding: 16px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  display: flex;
+  position: relative;
+}
+.history-entry a {
+  color: #000;
+  text-decoration: none;
+}
+.history-entry a:viseted {
+  text-decoration: none;
+}
+.history-entry .history-partner-name {
+  margin: 0 10px 0 0;
+  width: 50%;
+}
+.history-entry .history-percentage {
+  margin: 0 10px 0 0;
+}
+.history-entry .history-go-or-wait {
+  margin: 0 10px 0 0;
+  width: 19%;
+  text-align: center;
+  color: #81A4C7;
+  font-weight: bold;
+}
+.history-entry .history-delete-button {
+  margin: 0 10px 0 0;
+  position: absolute;
+  right: 0;
 }
 
-/*# sourceMappingURL=style.css.map */
+.btn {
+  background: #81A4C7;
+  border: none;
+  border-radius: 10px;
+  height: 40px;
+  line-height: 40px;
+  color: #fff;
+}/*# sourceMappingURL=style.css.map */

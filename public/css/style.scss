@@ -1,66 +1,221 @@
 @charset "UTF-8";
+$main-color :#81A4C7;
+$text-color:#000;
+//map型(key: value)でブレークポイントを定義する。
+// breakpointの設定
+$mq-breakpoints: (
+    pc: 1024px,
+    tb: 768px,
+    sp: 576px,
+    xs: 414px) !default;
+
+// Media Queryの設定
+@mixin mq($breakpoint: md, $rule: min, $subtraction: false) {
+    $breakpoint: map_get($mq-breakpoints, $breakpoint
+    );
+
+@if $rule==max and $subtraction {
+    $breakpoint: $breakpoint - 0.0625;
+}
+
+@media screen and (#{$rule}-width: $breakpoint) {
+    @content;
+}
+}
+
+html {
+    height: 100%;
+}
 
 body {
-  font-family: Arial, sans-serif;
-  background:#D7F3FD;
+    font-family: Arial, sans-serif;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+
+    @include mq(pc) {}
+
 }
 
 .container {
-  max-width: 600px;
-  margin: 50px auto;
-  text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+
+    @include mq(xs) {
+        padding: 130px 20px;
+    }
 }
 
-textarea, button, input {
-  width: 100%;
-  padding: 10px;
-  margin: 10px 0;
+textarea,
+input {
+    width: 100%;
+    padding: 10px 0 10px 10px;
+    margin: 0 0 20px;
+}
+
+/* menuボタンの設定 */
+#menu-btn {
+    background: $main-color;
+    color: #fff;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: none;
+    padding: 0;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+
+#nav {
+    background: rgba($main-color, .83);
+    width: 100%;
+    height: 100%;
+    position: relative;
+    padding: 160px 0;
+
+    li {
+        margin-bottom: 20px;
+    }
+
+    a {
+        color: #fff;
+        display: inline-block;
+        padding: 0 0 10px;
+        border-bottom: 2px solid #fff;
+    }
+}
+
+.close {
+    width: 50px;
+    /* 線の長さ */
+    position: absolute;
+    top: 40px;
+    right: 15px;
+}
+
+
+.close::before,
+.close::after {
+    content: "";
+    /* 疑似要素に必須 */
+    width: 100%;
+    /* 幅いっぱいを指定 */
+    height: 4px;
+    /* 適度な太さを指定 */
+    display: inline-block;
+    /* 高さを持たせるためにinline-blockを指定 */
+    background: #fff;
+    /* 線の色を指定 */
+    border-radius: 2px;
+    /* 線の端を丸くしたいなら指定する */
+    position: absolute;
+    /* 相対位置に指定 */
+    top: 0;
+    /* 表示位置を上から0pxに指定 */
+    left: 0;
+    /* 表示位置を左から0pxに指定 */
+}
+
+.close::before {
+    transform: rotate(45deg);
+    /* 時計回りに45度回転させる */
+}
+
+.close::after {
+    transform: rotate(-45deg);
+    /* 反時計回りに45度回転させる */
 }
 
 nav {
-  text-align: center;
-  margin-bottom: 20px;
+    text-align: center;
+    margin-bottom: 20px;
 
-  a {
-    margin: 0 15px;
-    text-decoration: none;
-    color: #007BFF;
-  }
+    a {
+        margin: 0 15px;
+        text-decoration: none;
+        color: #007BFF;
+    }
 }
 
 /* プログレスバーのスタイル */
-
 .progress-bar-container {
-  width: 100%;
-  background-color: #f3f3f3;
-  border-radius: 25px;
-  margin: 10px 0;
+    width: 100%;
+    background-color: #f3f3f3;
+    border-radius: 25px;
+    margin: 10px 0;
 }
 
 .progress-bar {
-  width: 0;
-  height: 20px;
-  background-color: #4caf50;
-  border-radius: 25px;
-  text-align: center;
-  line-height: 20px;
-  color: white;
+    width: 0;
+    height: 20px;
+    background-color: $main-color;
+    border-radius: 25px;
+    text-align: center;
+    line-height: 20px;
+    color: white;
 }
 
 #imageArea {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+
+    img {
+        width: 229px;
+        margin: 0 auto;
+    }
 }
 
 #compatibilityArea {
-  margin-bottom: 20px;
-  font-size: 18px;
+    margin-bottom: 20px;
+    font-size: 18px;
 }
 
 .history-entry {
-  margin: 10px 0;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+    margin: 10px 0;
+    padding: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: flex;
+    position: relative;
+    a {
+        //color: $main-color;
+        color: $text-color;
+        text-decoration: none;
+        &:viseted {
+            text-decoration: none;
+        }
+    }
+    .history-partner-name {
+        margin: 0 10px 0 0;
+        width: 50%;
+    }
+
+    .history-percentage {
+        margin: 0 10px 0 0;
+    }
+
+    .history-go-or-wait {
+        margin: 0 10px 0 0;
+        width: 19%;
+        text-align: center;
+        color: $main-color;
+        font-weight: bold;
+    }
+
+    .history-delete-button {
+        margin: 0 10px 0 0;
+        position: absolute;
+        right: 0;
+    }
 }
 
-/*# sourceMappingURL=style.css.map */
+.btn {
+    background: $main-color;
+    border: none;
+    border-radius: 10px;
+    height: 40px;
+    line-height: 40px;
+    color: #fff;
+}

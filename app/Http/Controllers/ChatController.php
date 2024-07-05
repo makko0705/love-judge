@@ -116,6 +116,11 @@ class ChatController extends Controller
         $consultation->delete();
         return response()->json(['success' => true]);
     }
+    public function getLatestConsultation()
+    {
+        $consultation = Consultation::with('diagnoses')->latest()->first();
+        return response()->json($consultation);
+    }
 
     private function fetchWithRetry($data, $retries = 5, $delayTime = 30000)
     {
