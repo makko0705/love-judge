@@ -44,9 +44,9 @@
         compatibilityArea.textContent = `${partnerName}さんとの恋愛可能性: ${compatibilityPercentage}%`;
 
         if (goOrWait === "GO") {
-            resultImage.src = '{{ asset("images/GO!.png") }}';
+            resultImage.src = '{{ asset("images/GO.png") }}';
         } else {
-            resultImage.src = '{{ asset("images/WAIT!.png") }}';
+            resultImage.src = '{{ asset("images/WAIT.png") }}';
         }
         resultImage.style.display = 'block';
 

@@ -34,7 +34,7 @@
             entryDiv.appendChild(nameDiv);
 
             const percentageDiv = document.createElement('div');
-            percentageDiv.textContent = diagnosisContent['恋愛可能性'] + '%';
+            percentageDiv.textContent = diagnosisContent['恋愛可能性'];
             entryDiv.appendChild(percentageDiv);
 
             const goOrWaitDiv = document.createElement('div');
