@@ -62,6 +62,10 @@ class ChatController extends Controller
         Log::info('Received userName: ' . $userName);
         Log::info('Determined partnerName: ' . $partnerName);
 
+        if (!$partnerName) {
+            return response()->json(['error' => 'Partner name not found in chat history'], 400);
+        }
+
         $prompt = "以下のチャット履歴を分析し、診断結果を提供してください。診断内容を以下のJSON形式で返してください:\n" .
         "{\n" .
         "  \"恋愛可能性\": \"◯%\",\n" .
@@ -155,8 +159,21 @@ class ChatController extends Controller
     private function findPartnerName($chatHistory, $userName)
     {
         $lines = explode("\n", $chatHistory);
-        $partnerLine = $lines[0];
-        $partnerNameMatch = preg_match("/\[LINE\] (.+)とのトーク履歴/", $partnerLine, $matches);
-        return $partnerNameMatch ? $matches[1] : null;
+        $userNames = [];
+        $partnerNames = [];
+
+        foreach ($lines as $line) {
+            $parts = explode("\t", $line);
+            if (count($parts) >= 2) {
+                $name = $parts[1];
+                if ($name === $userName) {
+                    $userNames[] = $name;
+                } else {
+                    $partnerNames[] = $name;
+                }
+            }
+        }
+
+        return !empty($partnerNames) ? $partnerNames[0] : null;
     }
 }
