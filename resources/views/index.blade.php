@@ -3,35 +3,37 @@
 @section('title', 'LINE履歴登録')
 
 @section('content')
+<div class="container page-history">
+
     <input type="text" id="userName" placeholder="あなたの名前を入力してください" />
     <input type="file" id="file" />
     <textarea id="chatHistory" rows="10" placeholder="ここにLINE履歴を入力してください..." readonly hidden></textarea>
     <button class="btn" id="analyzeButton">Analyze</button>
+</div>
+  <script>
+    const textarea = document.querySelector('#chatHistory');
+    document.querySelector('#file').addEventListener('change', e => {
+        if (e.target.files[0]) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = e => {
+                textarea.value = e.target.result;
+            };
+            reader.readAsText(file);
+        }
+    });
 
-    <script>
-        const MAX_CHAT_HISTORY_LENGTH = 7000; // 最大チャット履歴長を設定
+    document.getElementById('analyzeButton').addEventListener('click', () => {
+        const fullChatHistory = document.getElementById('chatHistory').value;
+        const userName = document.getElementById('userName').value;
 
-        const textarea = document.querySelector('#chatHistory');
-        document.querySelector('#file').addEventListener('change', e => {
-            if (e.target.files[0]) {
-                const file = e.target.files[0];
-                const reader = new FileReader();
-                reader.onload = e => {
-                    let chatHistory = e.target.result;
-                    if (chatHistory.length > MAX_CHAT_HISTORY_LENGTH) {
-                        chatHistory = chatHistory.substring(0, MAX_CHAT_HISTORY_LENGTH);
-                        alert('チャット履歴が長すぎるため、先頭の部分だけが解析されます。');
-                    }
-                    textarea.value = chatHistory;
-                };
-                reader.readAsText(file);
-            }
-        });
+        // チャット履歴の末尾部分を取得
+        const maxLength = 8000; // トークン数の制限に合わせて適宜変更
+        const truncatedChatHistory = fullChatHistory.slice(-maxLength);
 
-        document.getElementById('analyzeButton').addEventListener('click', () => {
-            sessionStorage.setItem('chatHistory', document.getElementById('chatHistory').value);
-            sessionStorage.setItem('userName', document.getElementById('userName').value);
-            window.location.href = 'progress';
-        });
-    </script>
+        sessionStorage.setItem('chatHistory', truncatedChatHistory);
+        sessionStorage.setItem('userName', userName);
+        window.location.href = 'progress';
+    });
+  </script>
 @endsection

@@ -3,6 +3,8 @@
 @section('title', '診断詳細')
 
 @section('content')
+<div class="container page-detail">
+
     <h1>{{ $consultation->partner_name }} さんの診断詳細</h1>
     @if ($consultation->diagnoses->isNotEmpty())
         @php
@@ -20,4 +22,5 @@
     @else
         <div>No diagnosis available</div>
     @endif
+</div>
 @endsection

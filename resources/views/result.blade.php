@@ -3,12 +3,14 @@
 @section('title', '診断結果')
 
 @section('content')
+<div class="container page-result">
+
     <div id="imageArea">
       <img id="resultImage" src="" alt="結果画像" style="display: none;">
     </div>
     <div id="compatibilityArea"></div>
     <textarea id="diagnosisResponse" rows="10" readonly></textarea>
-
+</div>
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             try {

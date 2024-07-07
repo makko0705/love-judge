@@ -3,9 +3,11 @@
 @section('title', '過去のデータ')
 
 @section('content')
+<div class="container page-history">
+
     <h1>過去のデータ</h1>
     <div id="historyList"></div>
-
+</div>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const historyList = document.getElementById('historyList');
