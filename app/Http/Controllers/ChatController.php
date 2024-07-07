@@ -18,7 +18,10 @@ class ChatController extends Controller
         $this->apiKeys = [
             env('OPENAI_API_KEY1'),
             env('OPENAI_API_KEY2'),
-            env('OPENAI_API_KEY3')
+            env('OPENAI_API_KEY3'),
+            env('OPENAI_API_KEY4'),
+            env('OPENAI_API_KEY5'),
+            env('OPENAI_API_KEY6')
         ];
         $this->apiEndpoint = 'https://api.openai.com/v1/chat/completions';
     }
@@ -87,6 +90,11 @@ class ChatController extends Controller
                 throw new \Exception('Failed to parse diagnosis content: ' . json_last_error_msg());
             }
 
+            // Check if the diagnosisObject contains all required keys
+            if (!isset($diagnosisObject['恋愛可能性']) || !isset($diagnosisObject['GOorWAIT']) || !isset($diagnosisObject['診断結果'])) {
+                throw new \Exception('Invalid JSON format in diagnosis content: Missing required keys.');
+            }
+
             $consultation = new Consultation();
             $consultation->user_name = $userName;
             $consultation->partner_name = $partnerName;
@@ -116,6 +124,7 @@ class ChatController extends Controller
         $consultation->delete();
         return response()->json(['success' => true]);
     }
+
     public function getLatestConsultation()
     {
         $consultation = Consultation::with('diagnoses')->latest()->first();
