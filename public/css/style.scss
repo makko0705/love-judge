@@ -140,6 +140,15 @@ nav {
 }
 
 /* プログレスバーのスタイル */
+.page-progress {
+    #imageArea {
+        text-align: right;
+    }
+
+}
+#progress {
+    margin-bottom: 50px;
+}
 .progress-bar-container {
     width: 100%;
     background-color: #f3f3f3;
@@ -155,6 +164,7 @@ nav {
     text-align: center;
     line-height: 20px;
     color: white;
+    transform: scale(1.3);
 }
 
 #imageArea {
