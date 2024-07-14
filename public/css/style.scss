@@ -1,60 +1,131 @@
 @charset "UTF-8";
 $main-color :#81A4C7;
+$sub-color:#E0BCD2;
 $text-color:#000;
 //map型(key: value)でブレークポイントを定義する。
 // breakpointの設定
-$mq-breakpoints: (
-    pc: 1024px,
-    tb: 768px,
-    sp: 576px,
-    xs: 414px) !default;
-
-// Media Queryの設定
-@mixin mq($breakpoint: md, $rule: min, $subtraction: false) {
-    $breakpoint: map_get($mq-breakpoints, $breakpoint
-    );
-
-@if $rule==max and $subtraction {
-    $breakpoint: $breakpoint - 0.0625;
-}
-
-@media screen and (#{$rule}-width: $breakpoint) {
-    @content;
-}
-}
 
 html {
     height: 100%;
 }
-
 body {
     font-family: Arial, sans-serif;
     height: 100%;
     padding: 0;
     margin: 0;
 
-    @include mq(pc) {}
 
 }
-
 .container {
-    max-width: 600px;
+    max-width: 780px;
     margin: 0 auto;
     text-align: center;
-
-    @include mq(xs) {
-        padding: 130px 20px;
+    padding: 40px 0;
+    position:absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    @media screen and (min-width:340px) and ( max-width:760px) {
+        max-width: 100%;
+        padding: 20px;
     }
 }
-
 textarea,
 input {
     width: 100%;
     padding: 10px 0 10px 10px;
     margin: 0 0 20px;
 }
+h1 {
+    margin:0 auto 60px;
+    width: 350px;
+        img {
+            width: 100%;
+        }
+    @media screen and (min-width:340px) and ( max-width:760px) {
+        max-width: 64vw;
+        margin: 0 auto 30px;
+    }
 
-/* menuボタンの設定 */
+}
+
+///////////////slideの設定///////////////
+.slide_wrap {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    background: #fff;
+    z-index: 2;
+    position:absolute;
+    padding: 40px 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    .read {
+        margin-bottom: 30px;
+    }
+    h1 {
+        margin-bottom: 60px;
+    }
+
+}
+.slick01 {
+    position: relative;
+    width: 640px;
+    margin: 0 auto 30px;
+    @media screen and (min-width:340px) and ( max-width:760px) {
+        max-width: 64vw;
+    }
+
+    .slick-prev:before, .slick-next:before {
+        font-size: 56px;
+        color: $main-color;
+    }
+    .slick-prev {
+        width: 70px;
+        height: 70px;
+        left: 0;
+        cursor: pointer;
+        z-index: 1000;
+
+    }
+    .slick-next {
+        width: 70px;
+        height: 70px;
+        right: 0;
+        cursor: pointer;
+        z-index: 1000;
+    }
+    .slick-dots {
+        bottom: inherit;
+        li {
+            width: 10px;
+            height: 10px;
+            background:rgba($main-color, .4);
+            border-radius: 50%;
+
+        }
+    .slick-active {
+        background: $main-color;
+        border-radius: 50%;
+
+    }
+    }
+    img {
+       // height: 62vh;
+       max-width: 450px;
+        width: auto;
+        margin: 0 auto;
+        @media screen and (min-width:340px) and ( max-width:760px) {
+            max-width: 64vw;
+        }
+
+    }
+    .slick-dotted.slick-slider {
+        margin-bottom: 43px;
+    }
+}
+///////////////menuの設定///////////////
 #menu-btn {
     background: $main-color;
     color: #fff;
@@ -66,14 +137,17 @@ input {
     position: absolute;
     top: 15px;
     right: 15px;
+    z-index: 10000;
 }
 
 #nav {
-    background: rgba($main-color, .83);
+    background: rgba($main-color, .95);
     width: 100%;
     height: 100%;
     position: relative;
+    top: 0;
     padding: 160px 0;
+    z-index: 3;
 
     li {
         margin-bottom: 20px;
@@ -99,35 +173,21 @@ input {
 .close::before,
 .close::after {
     content: "";
-    /* 疑似要素に必須 */
     width: 100%;
-    /* 幅いっぱいを指定 */
     height: 4px;
-    /* 適度な太さを指定 */
     display: inline-block;
-    /* 高さを持たせるためにinline-blockを指定 */
     background: #fff;
-    /* 線の色を指定 */
     border-radius: 2px;
-    /* 線の端を丸くしたいなら指定する */
     position: absolute;
-    /* 相対位置に指定 */
     top: 0;
-    /* 表示位置を上から0pxに指定 */
     left: 0;
-    /* 表示位置を左から0pxに指定 */
 }
-
 .close::before {
     transform: rotate(45deg);
-    /* 時計回りに45度回転させる */
 }
-
 .close::after {
     transform: rotate(-45deg);
-    /* 反時計回りに45度回転させる */
 }
-
 nav {
     text-align: center;
     margin-bottom: 20px;
@@ -184,9 +244,8 @@ nav {
 
 .history-entry {
     margin: 10px 0;
-    padding: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    padding: 20px;
+    border-bottom: 1px solid #000;
     display: flex;
     position: relative;
     a {
@@ -217,7 +276,8 @@ nav {
     .history-delete-button {
         margin: 0 10px 0 0;
         position: absolute;
-        right: 0;
+        right: 10px;
+        bottom: 19px;
     }
 }
 
@@ -225,7 +285,44 @@ nav {
     background: $main-color;
     border: none;
     border-radius: 10px;
-    height: 40px;
-    line-height: 40px;
+    height: 46px;
+    line-height: 46px;
     color: #fff;
+    padding: 0 30px;
+    display: inline-block;
+    font-size: 17px;
+}
+
+///////////////page-index///////////////
+.page-index {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 0;
+}
+#close_howto {
+    span {
+    cursor: pointer;
+    background: $main-color;
+    border: none;
+    border-radius: 10px;
+    height: 46px;
+    line-height: 46px;
+    color: #fff;
+    padding: 0 30px;
+    display: inline-block;
+    font-size: 17px;
+    }
+    text-align: center;
+}
+///////////////page-result///////////////
+.page-howto {
+}
+#diagnosisResponse,
+.diagnosisResponse {
+    width: 500px;
+    line-height: 1.5;
+    text-align: left;
+    margin: 0 auto;
 }

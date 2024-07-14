@@ -3,15 +3,66 @@
 @section('title', 'LINE履歴登録')
 
 @section('content')
-<div class="container page-history">
-
-    <input type="text" id="userName" placeholder="あなたの名前を入力してください" />
+<div class="slide_wrap" id="howto_wrap">
+    <h1><img src="images/h1_howto.png" alt="使い方"></h1>
+    <p class="read">このアプリはLINEのトーク履歴を使用して、<br>
+        恋愛の可能性をジャッジします。</p>
+    <ul class="slick01">
+        <li><img alt="使い方1" src="images/slide01.png" /></li>
+        <li><img alt="使い方2" src="images/slide02.png" /></li>
+        <li><img alt="使い方3" src="images/slide03.png" /></li>
+        <li><img alt="診断について" src="images/slide04.png" /></li>
+        </ul>
+    <p id="close_howto"><span>診断を始める</span></p>
+</div>
+<div class="container page-index">
+<h1><img src="images/h1_index.png" alt="診断する"></h1>
+    <input type="text" id="userName" placeholder="LINEの名前を正確に入力してください" />
     <input type="file" id="file" />
     <textarea id="chatHistory" rows="10" placeholder="ここにLINE履歴を入力してください..." readonly hidden></textarea>
-    <button class="btn" id="analyzeButton">Analyze</button>
+    <button class="btn" id="analyzeButton">診断する</button>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
   <script>
-    const textarea = document.querySelector('#chatHistory');
+    $('.slick01').slick({ //{}を入れる
+    autoplay: false, //「オプション名: 値」の形式で書く
+    dots: true,
+    responsive: [
+            {
+                breakpoint: 640,
+        settings: {
+            // 変えたいオプションを指定。
+            arrows: false,
+            slidesToShow: 1,
+            centerPadding: "10%",
+        },
+    },
+        ],
+  });
+
+
+function closeHowto(){
+    const close_howto = document.getElementById("close_howto");
+    const howto_wrap = document.getElementById("howto_wrap");
+    if(close_howto.style.display=="block"){
+        // noneで非表示
+        close_howto.style.display ="none";
+        howto_wrap.style.display ="none";
+    }else{
+        // blockで表示
+        close_howto.style.display ="block";
+        howto_wrap.style.display ="block";
+    }
+}
+$('#close_howto').click(function() {
+        console.log('クリックされました！');
+        $('#howto_wrap').hide();
+    })
+
+  </script>
+  <script>
+     const textarea = document.querySelector('#chatHistory');
     document.querySelector('#file').addEventListener('change', e => {
         if (e.target.files[0]) {
             const file = e.target.files[0];
@@ -36,4 +87,5 @@
         window.location.href = 'progress';
     });
   </script>
+
 @endsection

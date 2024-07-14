@@ -4,6 +4,7 @@
 
 @section('content')
 <div class="container page-result">
+    <h1><img src="images/h1_result.png" alt="診断結果"></h1>
 
     <div id="imageArea">
       <img id="resultImage" src="" alt="結果画像" style="display: none;">

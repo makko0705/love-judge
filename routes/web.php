@@ -5,6 +5,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\AuthController;
 
 Route::get('/', [ChatController::class, 'index'])->name('index');
+Route::get('/howto', [ChatController::class, 'howto'])->name('howto');
 Route::get('/progress', [ChatController::class, 'progress'])->name('progress');
 Route::get('/result', [ChatController::class, 'result'])->name('result');
 Route::get('/history', [ChatController::class, 'history'])->name('history');

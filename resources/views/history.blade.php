@@ -5,7 +5,7 @@
 @section('content')
 <div class="container page-history">
 
-    <h1>過去のデータ</h1>
+    <h1><img src="images/h1_history.png" alt="過去の診断結果"></h1>
     <div id="historyList"></div>
 </div>
     <script>

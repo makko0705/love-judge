@@ -6,12 +6,16 @@
     <title>@yield('title')</title>
     <link rel="stylesheet" href="{{ asset('css/reset.css') }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" href="{{ asset('css/slick-theme.css') }}">
+
     <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- CSRFトークンを追加 -->
 </head>
 <body>
     <div id="nav">
         <nav>
             <ul>
+                <li><a href="{{ url('/howto') }}">使い方</a></li>
                 <li><a href="{{ url('/') }}">診断する</a></li>
                 <li><a href="{{ url('/history') }}">過去のデータ</a></li>
             </ul>
@@ -20,9 +24,7 @@
     </div>
     <input type="button" value="MENU" onclick="clickBtn1()" id="menu-btn" />
 
-    <div class="container">
         @yield('content')
-    </div>
 
     <script>
         //初期表示は非表示

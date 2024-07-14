@@ -31,6 +31,11 @@ class ChatController extends Controller
         return view('index');
     }
 
+    public function howto()
+    {
+        return view('howto');
+    }
+
     public function progress()
     {
         return view('progress');

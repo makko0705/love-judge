@@ -4,6 +4,7 @@
 
 @section('content')
 <div class="container page-detail">
+    <h1><img src="../images/h1_result.png" alt="診断結果"></h1>
 
     {{-- <h1>{{ $consultation->partner_name }} さんの診断詳細</h1> --}}
     @if ($consultation->diagnoses->isNotEmpty())
@@ -17,10 +18,11 @@
 
         <div id="compatibilityArea">{{ $consultation->partner_name }}さんとの恋愛可能性: {{ $diagnosisContent['恋愛可能性'] }}</div>
         {{-- <div>GOorWAIT: {{ $diagnosisContent['GOorWAIT'] }}</div> --}}
-        <div>{{ $diagnosisContent['診断結果'] }}</div>
+        <div class="diagnosisResponse">{{ $diagnosisContent['診断結果'] }}</div>
 
     @else
         <div>No diagnosis available</div>
     @endif
 </div>
+
 @endsection
