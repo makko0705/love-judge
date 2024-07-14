@@ -1,17 +1,13 @@
 document.addEventListener('DOMContentLoaded', async () => {
     if (window.location.pathname.endsWith('/progress')) {
-        const csrfToken = document.querySelector('meta[name="csrf-token"]');
-        if (!csrfToken) {
-            console.error('CSRF token not found in the document.');
-            return;
-        }
-
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
         const chatHistory = sessionStorage.getItem('chatHistory');
         const userName = sessionStorage.getItem('userName');
+        const fileName = sessionStorage.getItem('fileName'); // ファイル名を取得
         const progressBar = document.getElementById('progressBar');
         const progressElement = document.getElementById('progress');
 
-        if (!chatHistory || !userName || !progressBar || !progressElement) {
+        if (!chatHistory || !userName || !fileName || !progressBar || !progressElement || !csrfToken) {
             console.error('Required elements or session data not found.');
             return;
         }
@@ -46,14 +42,13 @@ document.addEventListener('DOMContentLoaded', async () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken.getAttribute('content')
+                    'X-CSRF-TOKEN': csrfToken
                 },
-                body: JSON.stringify({ chatHistory: chatHistory, userName: userName })
+                body: JSON.stringify({ chatHistory: chatHistory, userName: userName, fileName: fileName })
             });
 
             if (!response.ok) {
-                const errorResponse = await response.json();
-                throw new Error(`HTTP error! status: ${response.status}, message: ${JSON.stringify(errorResponse)}`);
+                throw new Error('API Request failed');
             }
 
             updateProgressBar(50);
@@ -74,11 +69,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         } catch (error) {
             console.error('Error:', error);
 
-            // ここでエラーメッセージを適切に表示します
-            if (error instanceof Error) {
-                progressElement.textContent = `Error: ${error.message}`;
-            } else {
-                progressElement.textContent = `Error: ${JSON.stringify(error)}`;
+            // エラーメッセージを非表示に設定
+            const imageArea = document.getElementById('imageArea');
+            const errorElement = document.querySelector('.error');
+            if (imageArea) {
+                imageArea.style.display = 'none';
+            }
+            if (errorElement) {
+                errorElement.style.display = 'block';
             }
         }
     }

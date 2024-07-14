@@ -12,11 +12,11 @@
         <li><img alt="使い方2" src="images/slide02.png" /></li>
         <li><img alt="使い方3" src="images/slide03.png" /></li>
         <li><img alt="診断について" src="images/slide04.png" /></li>
-        </ul>
+    </ul>
     <p id="close_howto"><span>診断を始める</span></p>
 </div>
 <div class="container page-index">
-<h1><img src="images/h1_index.png" alt="診断する"></h1>
+    <h1><img src="images/h1_index.png" alt="診断する"></h1>
     <input type="text" id="userName" placeholder="LINEの名前を正確に入力してください" />
     <input type="file" id="file" />
     <textarea id="chatHistory" rows="10" placeholder="ここにLINE履歴を入力してください..." readonly hidden></textarea>
@@ -24,45 +24,36 @@
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
 <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
-  <script>
-    $('.slick01').slick({ //{}を入れる
-    autoplay: false, //「オプション名: 値」の形式で書く
-    dots: true,
-    responsive: [
-            {
-                breakpoint: 640,
-        settings: {
-            // 変えたいオプションを指定。
-            arrows: false,
-            slidesToShow: 1,
-            centerPadding: "10%",
-        },
-    },
-        ],
-  });
+<script>
+    $('.slick01').slick({
+        autoplay: false,
+        dots: true,
+        responsive: [{
+            breakpoint: 640,
+            settings: {
+                arrows: false,
+                slidesToShow: 1,
+                centerPadding: "10%",
+            },
+        }, ],
+    });
 
-
-function closeHowto(){
-    const close_howto = document.getElementById("close_howto");
-    const howto_wrap = document.getElementById("howto_wrap");
-    if(close_howto.style.display=="block"){
-        // noneで非表示
-        close_howto.style.display ="none";
-        howto_wrap.style.display ="none";
-    }else{
-        // blockで表示
-        close_howto.style.display ="block";
-        howto_wrap.style.display ="block";
+    function closeHowto() {
+        const close_howto = document.getElementById("close_howto");
+        const howto_wrap = document.getElementById("howto_wrap");
+        if (close_howto.style.display == "block") {
+            close_howto.style.display = "none";
+            howto_wrap.style.display = "none";
+        } else {
+            close_howto.style.display = "block";
+            howto_wrap.style.display = "block";
+        }
     }
-}
-$('#close_howto').click(function() {
-        console.log('クリックされました！');
+    $('#close_howto').click(function() {
         $('#howto_wrap').hide();
     })
 
-  </script>
-  <script>
-     const textarea = document.querySelector('#chatHistory');
+    const textarea = document.querySelector('#chatHistory');
     document.querySelector('#file').addEventListener('change', e => {
         if (e.target.files[0]) {
             const file = e.target.files[0];
@@ -71,6 +62,7 @@ $('#close_howto').click(function() {
                 textarea.value = e.target.result;
             };
             reader.readAsText(file);
+            sessionStorage.setItem('fileName', file.name); // ファイル名をセッションに保存
         }
     });
 
@@ -86,6 +78,5 @@ $('#close_howto').click(function() {
         sessionStorage.setItem('userName', userName);
         window.location.href = 'progress';
     });
-  </script>
-
+</script>
 @endsection

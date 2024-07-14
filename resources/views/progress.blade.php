@@ -15,6 +15,10 @@
     <div id="imageArea">
         <img id="resultImage" src="{{ asset('images/WAN.png') }}" alt="結果画像">
     </div>
+    <div class="error" style="display:none;">
+        <img id="errorImage" src="{{ asset('images/SORRY.png') }}" alt="エラー画像">
+        <p>エラーが発生しました。しばらくしてからもう一度お試しください。</p>
+    </div>
 </div>
 <script src="{{ asset('js/script.js') }}"></script>
 @endsection

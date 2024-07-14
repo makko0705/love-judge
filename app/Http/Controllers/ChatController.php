@@ -62,13 +62,14 @@ class ChatController extends Controller
     {
         $chatHistory = $request->input('chatHistory');
         $userName = $request->input('userName');
-        $partnerName = $this->findPartnerName($chatHistory, $userName);
+        $fileName = $request->input('fileName');
+        $partnerName = $this->findPartnerNameFromFileName($fileName, $userName);
 
         Log::info('Received userName: ' . $userName);
         Log::info('Determined partnerName: ' . $partnerName);
 
         if (!$partnerName) {
-            return response()->json(['error' => 'Partner name not found in chat history'], 400);
+            return response()->json(['error' => 'Partner name not found in file name'], 400);
         }
 
         $prompt = "以下のチャット履歴を分析し、診断結果を提供してください。診断内容を以下のJSON形式で返してください:\n" .
@@ -104,6 +105,9 @@ class ChatController extends Controller
                 throw new \Exception('Invalid JSON format in diagnosis content: Missing required keys.');
             }
 
+            // Update GOorWAIT logic based on the new condition
+            $diagnosisObject['GOorWAIT'] = intval($diagnosisObject['恋愛可能性']) >= 80 ? 'GO' : 'WAIT';
+
             $consultation = new Consultation();
             $consultation->user_name = $userName;
             $consultation->partner_name = $partnerName;
@@ -122,7 +126,7 @@ class ChatController extends Controller
             if (isset($responseBody)) {
                 Log::error('Response Body: ' . $responseBody);
             }
-            return response()->json(['error' => 'API Request failed', 'message' => $e->getMessage()], 500);
+            return response()->json(['error' => 'API Request failed', 'message' => 'エラーが発生しました。しばらくしてからもう一度お試しください。'], 500);
         }
     }
 
@@ -161,24 +165,13 @@ class ChatController extends Controller
         throw new \Exception('Too many requests after multiple retries');
     }
 
-    private function findPartnerName($chatHistory, $userName)
+    private function findPartnerNameFromFileName($fileName, $userName)
     {
-        $lines = explode("\n", $chatHistory);
-        $userNames = [];
-        $partnerNames = [];
-
-        foreach ($lines as $line) {
-            $parts = explode("\t", $line);
-            if (count($parts) >= 2) {
-                $name = $parts[1];
-                if ($name === $userName) {
-                    $userNames[] = $name;
-                } else {
-                    $partnerNames[] = $name;
-                }
-            }
+        // ファイル名から相手の名前を抽出するロジック
+        $pattern = '/\[LINE\] (.+)とのトーク/';
+        if (preg_match($pattern, $fileName, $matches)) {
+            return $matches[1];
         }
-
-        return !empty($partnerNames) ? $partnerNames[0] : null;
+        return null;
     }
 }
