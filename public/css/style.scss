@@ -13,6 +13,8 @@ body {
     height: 100%;
     padding: 0;
     margin: 0;
+    line-height: 1.5;
+
 
 
 }
@@ -201,19 +203,19 @@ nav {
 
 /* プログレスバーのスタイル */
 .page-progress {
+    padding: 100px;
     #imageArea {
         text-align: right;
     }
-
 }
 #progress {
     margin-bottom: 50px;
 }
 .progress-bar-container {
-    width: 100%;
+    max-width: 780px;
     background-color: #f3f3f3;
     border-radius: 25px;
-    margin: 10px 0;
+    margin: 10px auto;
 }
 
 .progress-bar {
@@ -317,12 +319,25 @@ nav {
     text-align: center;
 }
 ///////////////page-result///////////////
-.page-howto {
+.page-result {
+    textarea {
+        padding: 0;
+      }
+
+
 }
 #diagnosisResponse,
 .diagnosisResponse {
     width: 500px;
-    line-height: 1.5;
     text-align: left;
     margin: 0 auto;
+    @media screen and (min-width:340px) and ( max-width:760px) {
+        width: 100%;
+    }
+
 }
+///////////////error///////////////
+.errorImage {
+    margin-bottom: 30px;
+}
+

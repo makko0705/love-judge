@@ -6,7 +6,7 @@
 <div class="container page-progress">
 
   <meta name="csrf-token" content="{{ csrf_token() }}"> <!-- 追加: CSRFトークンのメタタグ -->
-    <h1>進行状況</h1>
+    {{-- <h1>進行状況</h1> --}}
     <div class="progress-bar-container">
         <div id="progressBar" class="progress-bar">0%</div>
     </div>
