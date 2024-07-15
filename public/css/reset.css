@@ -52,12 +52,12 @@ border-collapse: collapse;
 border-spacing: 0;
 }
 
-input[type="checkbox"] {
+/* input[type="checkbox"] {
     border-radius: 0;
     -webkit-appearance: none;
        -moz-appearance: none;
             appearance: none;
-  }
+  } */
   select {
     -webkit-appearance: none;
     -moz-appearance: none;

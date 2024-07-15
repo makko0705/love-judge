@@ -43,6 +43,9 @@ input {
         margin: 0 auto 20px;
     }
 }
+input[type="checkbox"] {
+    width: inherit;
+}
 h1 {
     margin:0 auto 60px;
     width: 350px;
@@ -300,7 +303,32 @@ nav {
     display: inline-block;
     font-size: 17px;
 }
+.btn.disabled {
+    background: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+  }
 
+  .btn.enabled {
+    background: #81A4C7;
+    color: #ffffff;
+    cursor: pointer;
+  }
+
+  .privacy,
+  .teams {
+    h2 {
+        font-size: 14px;
+    }
+    textarea {
+        background: rgba($main-color, .2);
+        width: 70%;
+        margin: 0 auto;
+        height: 120px;
+        overflow-y: scroll;
+        font-size: 13px;
+    }
+  }
 ///////////////page-index///////////////
 .page-index {
     position: absolute;

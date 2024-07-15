@@ -43,6 +43,10 @@ input {
   }
 }
 
+input[type=checkbox] {
+  width: inherit;
+}
+
 h1 {
   margin: 0 auto 60px;
   width: 350px;
@@ -293,6 +297,32 @@ nav a {
   padding: 0 30px;
   display: inline-block;
   font-size: 17px;
+}
+
+.btn.disabled {
+  background: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+}
+
+.btn.enabled {
+  background: #81A4C7;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.privacy h2,
+.teams h2 {
+  font-size: 14px;
+}
+.privacy textarea,
+.teams textarea {
+  background: rgba(129, 164, 199, 0.2);
+  width: 70%;
+  margin: 0 auto;
+  height: 120px;
+  overflow-y: scroll;
+  font-size: 13px;
 }
 
 .page-index {
