@@ -24,7 +24,7 @@ body {
 @media screen and (min-width: 340px) and (max-width: 760px) {
   .container {
     max-width: 100%;
-    padding: 20px;
+    padding: 40px;
   }
 }
 
@@ -33,6 +33,14 @@ input {
   width: 100%;
   padding: 10px 0 10px 10px;
   margin: 0 0 20px;
+}
+@media screen and (min-width: 340px) and (max-width: 760px) {
+  textarea,
+  input {
+    width: 76%;
+    padding: 10px;
+    margin: 0 auto 20px;
+  }
 }
 
 h1 {
@@ -259,6 +267,7 @@ nav a {
 }
 .history-entry .history-percentage {
   margin: 0 10px 0 0;
+  width: 11%;
 }
 .history-entry .history-go-or-wait {
   margin: 0 10px 0 0;

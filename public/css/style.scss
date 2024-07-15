@@ -29,7 +29,7 @@ body {
     right: 0;
     @media screen and (min-width:340px) and ( max-width:760px) {
         max-width: 100%;
-        padding: 20px;
+        padding: 40px;
     }
 }
 textarea,
@@ -37,6 +37,11 @@ input {
     width: 100%;
     padding: 10px 0 10px 10px;
     margin: 0 0 20px;
+    @media screen and (min-width: 340px) and (max-width: 760px) {
+        width: 76%;
+        padding: 10px;
+        margin: 0 auto 20px;
+    }
 }
 h1 {
     margin:0 auto 60px;
@@ -265,6 +270,7 @@ nav {
 
     .history-percentage {
         margin: 0 10px 0 0;
+        width: 11%;
     }
 
     .history-go-or-wait {

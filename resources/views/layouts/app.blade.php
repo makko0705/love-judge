@@ -15,7 +15,6 @@
     <div id="nav">
         <nav>
             <ul>
-                <li><a href="{{ url('/howto') }}">使い方</a></li>
                 <li><a href="{{ url('/') }}">診断する</a></li>
                 <li><a href="{{ url('/history') }}">過去のデータ</a></li>
             </ul>
